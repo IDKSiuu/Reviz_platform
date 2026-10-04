@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>History Revision Quiz</title>
+<style>
+:root{--bg:#1e1f24;--cd:#2b2d34;--tx:#eef0f4;--mu:#a0a6b2;--ac:#8ab4ff;--ok:#3fbf86;--bd:#ef6b6b;--on:#0f1218}
+[data-t=sun]{--bg:#f5f8fc;--cd:#fff;--tx:#18212f;--mu:#566274;--ac:#2563eb;--ok:#15803d;--bd:#c62f2f;--on:#fff}
+[data-t=solar]{--bg:#fff1d6;--cd:#ffe0a8;--tx:#3a1d00;--mu:#7a4a12;--ac:#d9480f;--ok:#2b7a2f;--bd:#b71c1c;--on:#fff}
+[data-t=dream]{--bg:#e9e6ff;--cd:#f8f6ff;--tx:#2a2350;--mu:#625c8f;--ac:#7048e8;--ok:#14866b;--bd:#c2255c;--on:#fff}
+[data-t=nat]{--bg:#e6f2e3;--cd:#f6fbf4;--tx:#15301a;--mu:#47664c;--ac:#2b7a39;--ok:#1b7437;--bd:#a93a2a;--on:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif;padding:56px 14px 48px}
+main{max-width:640px;margin:auto}button,select,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;background:var(--cd);color:var(--tx);box-shadow:0 1px 3px #0003}
+button.p,button.on{background:var(--ac);color:var(--on)}
+select,input[type=number]{background:var(--cd);border:1px solid var(--mu);border-radius:8px;padding:6px}
+.card,.opt{background:var(--cd);border-radius:16px;padding:16px;margin:10px 0;box-shadow:0 1px 4px #0002}
+.opt{display:block;width:100%;text-align:left;border:2px solid transparent}.opt b{color:var(--ac);margin-right:8px}
+.opt.sel{border-color:var(--ac)}.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 22%,var(--cd))}.opt.bad{border-color:var(--bd);background:color-mix(in srgb,var(--bd) 22%,var(--cd))}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:0 0 auto}.sp{justify-content:space-between}
+.prog{height:6px;background:var(--cd);border-radius:9px;overflow:hidden}.prog i{display:block;height:100%;background:var(--ac)}
+#gear{position:fixed;top:10px;left:10px;z-index:5}
+#st{position:fixed;inset:0 auto 0 0;width:min(320px,90vw);background:var(--cd);padding:60px 16px 16px;transform:translateX(-105%);transition:.25s;z-index:4;overflow:auto;box-shadow:2px 0 12px #0005}#st.o{transform:none}
+footer{position:fixed;bottom:6px;left:0;right:0;text-align:center;font-size:12px;opacity:.5;pointer-events:none}
+small,.mu{color:var(--mu)}.ex{border-left:4px solid var(--ac);padding-left:10px}
+.fc{min-height:200px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:19px;cursor:pointer}
+.flip{animation:f .3s}@keyframes f{from{transform:rotateY(90deg)}}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:9}.star{background:none;box-shadow:none;font-size:22px;color:var(--ac)}
+</style></head><body>
+<button id="gear" aria-label="Settings">⚙️</button><div id="st"></div><main id="app"></main>
+<footer>All rights reserved - ©️IDKSiuu 2026</footer>
+<script>
+const $=s=>document.querySelector(s),app=$('#app'),st=$('#st'),K='h9quiz';
+const L='Liên Xô – Mĩ – Châu Âu',A='Châu Á',W='Chiến tranh thế giới',V='Việt Nam';
+const Q=(id,chapter,question,options,answer,explanation)=>({id,chapter,question,options,answer,explanation});
+/* Add more questions here (answer = letter "A"-"D" or index 0-3; use a new unique id, e.g. 30):
+   {id:30,chapter:"Topic",question:"...?",options:["a","b","c","d"],answer:"A",explanation:"..."} */
+const EXTRA=[];
+const B=[
+Q(1,L,`Đâu không phải thành tựu của Liên Xô về kinh tế trong giai đoạn 1922 đến năm 1945?`,[`Trở thành cường quốc công nghiệp sau 2 kế hoạch 5 năm xây dựng chủ nghĩa xã hội.`,`Giai cấp bóc lột bị xóa bỏ, còn lại giai cấp công nhân và nông dân tập thể.`,`Sản lượng công nghiệp chiếm hơn 70% tổng sản phẩm kinh tế quốc dân.`,`Sản lượng công nghiệp đứng đầu châu Âu.`],`B`,`Các ý A, C, D đều là thành tựu kinh tế của Liên Xô (công nghiệp đứng đầu châu Âu, thứ hai thế giới sau Mĩ); ý B không phải.`),
+Q(2,L,`Nội dung nào sau đây không phải hạn chế của công cuộc xây dựng chủ nghĩa xã hội ở Liên Xô (trước năm 1941)?`,[`Nóng vội, thiếu dân chủ trong quá trình tập thể hóa nông nghiệp.`,`Cải cách xã hội như cải thiện điều kiện sống của công nhân và nông dân.`,`Chưa chú trọng đúng mức đến việc nâng cao đời sống nhân dân.`,`Tồn tại những sự phân biệt đối xử giữa tầng lớp xã hội và nguồn gốc dân tộc.`],`B`,`Đây là thành tựu và mục tiêu tích cực, không phải là hạn chế.`),
+Q(3,L,`Tác động của chính sách mới đối với chế độ chính trị nước Mỹ là gì?`,[`Duy trì chế độ dân chủ.`,`Giải quyết nạn thất nghiệp hoàn toàn.`,`Xóa dịu mâu thuẫn xã hội gay gắt.`,`Tạo thêm nhiều việc làm mới cho người dân.`],`A`,`"Chính sách mới" giúp Mĩ vượt qua khủng hoảng và củng cố vững chắc nền dân chủ tư sản.`),
+Q(4,L,`Hoàn cảnh cơ bản nào sau đây dẫn đến sự ra đời của Quốc tế cộng sản?`,[`Cao trào cách mạng dâng cao ở các nước thuộc châu Âu dẫn đến sự thành lập các đảng cộng sản.`,`Chính quyền tư sản đàn áp khủng bố phong trào của quần chúng.`,`Những hoạt động tích cực của Lê-nin và Đảng Bôn-sê-vích Nga.`,`Quốc tế thứ hai giải tán sau chiến tranh.`],`A`,`Sự phát triển của phong trào công nhân châu Âu và sự ra đời hàng loạt đảng cộng sản đòi hỏi có tổ chức quốc tế lãnh đạo chung.`),
+Q(5,L,`Nền kinh tế Mĩ sau chiến tranh thế giới thứ nhất như thế nào?`,[`Bị khủng hoảng trầm trọng.`,`Đạt tăng trưởng cao, bước vào thời kì "hoàng kim".`,`Vẫn giữ được mức bình thường như trước chiến tranh.`,`Bị tàn phá nặng nề.`],`B`,`Mĩ thu lợi lớn từ chiến tranh, trở thành trung tâm công nghiệp và tài chính thế giới trong những năm 1920.`),
+Q(6,A,`Phong trào giải phóng dân tộc ở châu Á sau Chiến tranh thế giới thứ nhất có quy mô như thế nào?`,[`Phong trào nổ ra rầm rộ ở Đông Bắc Á.`,`Phong trào diễn ra quyết liệt ở Đông Nam Á và Tây Á.`,`Phong trào có quy mô rộng khắp toàn châu Á.`,`Phong trào chỉ có quy mô ở một vài quốc gia.`],`C`,`Phong trào bùng nổ mạnh mẽ ở cả Đông Bắc Á, Đông Nam Á, Nam Á và Tây Á.`),
+Q(7,A,`Suốt thập niên 30 của thế kỉ XX, phong trào đấu tranh chống thực dân Anh ở Ấn Độ diễn ra dưới hình thức nào?`,[`Bất hợp tác với thực dân Anh.`,`Bạo động vũ trang.`,`Thương lượng với thực dân Anh.`,`Đấu tranh nghị trường.`],`A`,`Dưới sự lãnh đạo của Mahatma Gandhi, hình thức đấu tranh nổi bật là bất bạo động và bất hợp tác.`),
+Q(8,A,`Điểm nổi bật nhất của phong trào giải phóng dân tộc ở Đông Nam Á sau chiến tranh thế giới thứ nhất là gì?`,[`Phong trào diễn ra sôi nổi với nhiều hình thức phong phú.`,`Lan rộng khắp các quốc gia.`,`Phong trào chủ trì tư sản phát triển.`,`Giai cấp vô sản trưởng thành, tham gia lãnh đạo cách mạng.`],`D`,`Các đảng cộng sản lần lượt ra đời, đánh dấu bước ngoặt giai cấp vô sản bước lên vũ đài chính trị.`),
+Q(9,W,`Đâu không phải là nguyên nhân chính dẫn đến cuộc Chiến tranh thế giới thứ hai (1939 - 1945)?`,[`Đức muốn làm bá chủ châu Âu và thống trị thế giới.`,`Sự xuất hiện chủ nghĩa phát xít.`,`Chính sách thỏa hiệp, nhượng bộ phát xít của các nước Anh, Pháp, Mỹ.`,`Do hậu quả của cuộc khủng hoảng kinh tế thế giới (1929 - 1933).`],`B`,`Do "Sự xuất hiện chủ nghĩa phát xít" là nguyên nhân phụ không phải nguyên nhân chính đầy đủ cấu thành bùng nổ chiến tranh.`),
+Q(10,W,`Tháng 1/1942, mặt trận Đông Minh được thành lập nhằm mục đích gì?`,[`Trả sự tấn công của Nhật vào hạm đội Mỹ.`,`Chống lại sự tấn công của phát xít Đức ở châu Âu.`,`Đoàn kết và tập hợp các lực lượng trên thế giới để tiêu diệt chủ nghĩa phát xít.`,`Liên kết giữa các nước phát xít và khối tư bản để chống Liên Xô.`],`C`,`Đây là liên minh chống phát xít trong Thế chiến thứ hai.`),
+Q(11,W,`Điểm tương đồng về nguyên nhân sâu xa dẫn đến sự bùng nổ của hai cuộc chiến tranh thế giới là gì?`,[`Tư tưởng thù ghét chủ nghĩa cộng sản của các nước Mĩ, Anh, Pháp.`,`Mâu thuẫn giữa các nước đế quốc về vấn đề thị trường, thuộc địa.`,`Mâu thuẫn giữa nhân dân các nước thuộc địa với các nước đế quốc, thực dân.`,`Lực lượng phát xít thắng thế và lên nắm quyền ở một số nước Âu - Mĩ.`],`B`,`Sự phát triển không đều của chủ nghĩa tư bản làm thay đổi tương quan lực lượng, dẫn đến tranh giành thuộc địa.`),
+Q(12,V,`Các cuộc đấu tranh của giai cấp tư sản Việt Nam trong phong trào dân tộc, dân chủ công khai (1919 - 1925) nhằm mục tiêu chủ yếu nào sau đây?`,[`Đòi tự do tín ngưỡng.`,`Đòi quyền lợi chính trị.`,`Đòi độc lập dân tộc.`,`Đòi quyền lợi kinh tế, tự do kinh doanh.`],`D`,`Giai cấp tư sản dân tộc lúc này chủ yếu đấu tranh đòi quyền lợi về kinh tế và quyền tự do thương mại.`),
+Q(13,V,`Sự kiện nào sau đây đánh dấu giai cấp công nhân Việt Nam bước đầu đấu tranh tự giác?`,[`Thành lập Hội Việt Nam Cách mạng Thanh niên.`,`Cuộc bãi công của công nhân Ba Son (tháng 8/1925).`,`Cuộc bãi công của thợ nhuộm Sài Gòn - Chợ Lớn.`,`Sự ra đời của Công hội ở Sài Gòn - Chợ Lớn.`],`B`,`Cuộc bãi công này đánh dấu bước tiến mới khi công nhân đấu tranh có tổ chức và vì mục đích chính trị rõ ràng.`),
+Q(14,V,`Chương trình, Điều lệ của Hội Việt Nam Cách mạng Thanh niên đã khẳng định mục đích của tổ chức là gì?`,[`Làm cách mạng dân tộc và cách mạng thế giới để đi tới xã hội cộng sản.`,`Tiến hành cách mạng dân tộc để tiến lên xây dựng chủ nghĩa xã hội.`,`Tiến hành cách mạng tư sản dân quyền, bỏ qua thời kỳ tư bản chủ nghĩa.`,`Chống Pháp giành độc lập dân tộc, thành lập nền quân chủ lập hiến.`],`A`,`Mục tiêu cốt lõi trong văn kiện do Nguyễn Ái Quốc soạn thảo là làm cách mạng giải phóng dân tộc để tiến lên chủ nghĩa xã hội/cộng sản.`),
+Q(20,W,`Cuộc khủng hoảng kinh tế thế giới (1929 - 1933) đã...`,[`Giúp nền kinh tế các nước tư bản phát triển mạnh mẽ.`,`Tàn phá nặng nề nền kinh tế tư bản chủ nghĩa và dẫn đến sự hình thành hai khối đế quốc đối lập.`,`Chấm dứt hoàn toàn tình trạng khủng hoảng thừa trên thế giới.`,`Mở ra thời kỳ hòa bình và thịnh vượng toàn cầu.`],`B`,`Khủng hoảng làm suy yếu các nước tư bản chủ nghĩa và đẩy nhanh con đường phát xít hóa để chuẩn bị chiến tranh.`),
+Q(21,L,`Nội dung nào sau đây không phải là ý nghĩa của phong trào cách mạng ở các nước tư bản châu Âu (1918 - 1923)?`,[`Buộc các nước Tây Âu phải thay đổi các chính sách cai trị thuộc địa.`,`Góp phần làm rõ bộ mặt tàn bạo, bóc lột của chủ nghĩa tư bản.`,`Làm cho xã hội của các nước tư bản Âu châu thêm rối loạn.`,`Phản đối tấn công vào thành trì của chủ nghĩa đế quốc.`],`A`,`Đây là phong trào diễn ra tại các nước tư bản châu Âu, không trực tiếp liên quan đến chính sách cai trị thuộc địa.`),
+Q(22,A,`Nhận xét nào sau đây phản ánh đúng về phong trào Ngũ Tứ (1919) ở Trung Quốc?`,[`Góp phần vào cuộc chiến tranh chống phát xít của nhân dân trên thế giới.`,`Tạo điều kiện cho chủ nghĩa Mác - Lênin được truyền bá rộng rãi ở Trung Quốc.`,`Xóa bỏ những tàn dư của chế độ phong kiến, xây dựng một chế độ xã hội mới.`,`Góp phần giải quyết được mâu thuẫn giữa Quốc Dân đảng và Đảng Cộng sản.`],`B`,`Phong trào Ngũ Tứ đánh dấu bước chuyển sang giai đoạn cách mạng dân chủ tư sản kiểu mới, mở đường cho chủ nghĩa Mác - Lênin thâm nhập.`),
+Q(23,A,`Phong trào đấu tranh giải phóng dân tộc ở châu Á từ năm 1918 đến năm 1945 không có ý nghĩa nào sau đây?`,[`Tấn công vào thành trì của chủ nghĩa đế quốc, thực dân.`,`Xóa bỏ hoàn toàn ách thống trị của chủ nghĩa thực dân trên toàn châu Á trước năm 1945.`,`Góp phần vào chiến thắng chống chủ nghĩa phát xít.`,`Đưa đến sự ra đời của một số nước cộng hòa ở châu Á.`],`B`,`Đến trước năm 1945, phần lớn các nước châu Á vẫn là thuộc địa, chỉ đến cuối CTTG II phong trào mới thắng lợi ở một số nước.`),
+Q(24,W,`Ngày 15/5/1945, Nhật Bản chấp nhận đầu hàng Đồng minh không điều kiện đã...`,[`Đánh dấu sự thắng lợi của các thuộc địa với nước đế quốc, thực dân.`,`Tạo thời cơ thuận lợi cho các nước Đông Nam Á (trong đó có Việt Nam) đứng lên tổng khởi nghĩa giành chính quyền.`,`Đưa chiến tranh thế giới thứ hai bước vào giai đoạn kết thúc.`,`Chấm dứt sự tồn tại của chủ nghĩa đế quốc trên phạm vi thế giới.`],`B`,`Việc Nhật đầu hàng khiến phát xít ở Đông Dương tê liệt, tạo ra "thời cơ vàng" cho Cách mạng tháng Tám năm 1945 thành công.`),
+Q(25,L,`Theo sơ đồ kiến thức tổng quát về Nước Nga và Liên Xô (1918 - 1945), vào cuối thập niên 30 của thế kỉ XX, Liên Xô đạt vị thế thế nào về công nghiệp?`,[`Đứng đầu thế giới về mọi mặt kinh tế.`,`Trở thành cường quốc công nghiệp đứng đầu châu Âu, thứ hai thế giới (sau Mĩ).`,`Chỉ phát triển mạnh công nghiệp nhẹ và nông nghiệp.`,`Chậm phát triển so với các nước tư bản châu Âu.`],`B`,`Sơ đồ tổng quát ghi nhận Liên Xô vươn lên đứng đầu châu Âu và đứng thứ hai thế giới.`),
+Q(26,L,`Nội dung nào được ghi nhận là mặt "Hạn chế" trong sơ đồ tổng quát về Nước Nga và Liên Xô (1918 - 1945)?`,[`Xoá bỏ tầng lớp bóc lột ở nông thôn.`,`Phát triển giáo dục phổ thông và giáo dục bậc cao.`,`Mất cân đối giữa công nghiệp nặng và công nghiệp nhẹ, giữa công nghiệp và nông nghiệp; vi phạm nguyên tắc tự nguyện trong tập thể hoá nông nghiệp.`,`Cải thiện đời sống nhân dân toàn diện.`],`C`,`Đây là các điểm hạn chế cốt lõi được liệt kê trong sơ đồ kinh tế - xã hội của bài học.`),
+Q(27,A,`Theo sơ đồ tư duy về Châu Á (1918 - 1945), phong trào tiêu biểu nào đã bùng nổ từ năm 1919 ở Trung Quốc?`,[`Phong trào Ngũ Tứ.`,`Cách mạng tháng Mười Nga.`,`Cách mạng dân ở Mông Cổ.`,`Chiến tranh giải phóng ở Thổ Nhĩ Kỳ.`],`A`,`Sơ đồ ghi nhận phong trào Ngũ Tứ là một trong các phong trào tiêu biểu ở khu vực châu Á.`),
+Q(28,L,`Trong sơ đồ xương cá về sự kiện lịch sử châu Âu và nước Mĩ (1918 - 1945), chương trình chống khủng hoảng của Tổng thống Mĩ Roosevelt là gì?`,[`Chương trình New Deal.`,`Chính sách kinh tế mới (NEP).`,`Kế hoạch 5 năm lần thứ nhất.`,`Chiến lược đối ngoại toàn cầu.`],`A`,`Sơ đồ xương cá chỉ rõ chương trình New Deal là chính sách kinh tế - chính trị quan trọng giúp Mĩ vượt qua khủng hoảng.`),
+Q(29,V,`Dựa vào sơ đồ mốc thời gian hoạt động của Nguyễn Ái Quốc, sự kiện diễn ra vào tháng 7 năm 1920 là gì?`,[`Gia nhập Đảng Xã hội Pháp.`,`Gửi yêu cầu tới Hội nghị Véc-xai.`,`Trở thành tập viên của Người cùng khổ.`,`Đọc bản thảo của Lê-nin về vấn đề dân tộc.`],`D`,`Mốc tháng 7/1920 trong sơ đồ đánh dấu việc Người đọc bản thảo luận cương của Lê-nin.`)
+].concat(EXTRA);
+B.forEach((q,i)=>q.id=q.id||100+i);
+const CH=[...new Set(B.map(q=>q.chapter))],THEMES=[['','Gloomy'],['sun','Sunlight'],['solar','Solar'],['dream','Dreamy'],['nat','Natural']];
+const D=()=>({theme:'',vol:60,mute:false,bm:[],hist:[],days:[],done:[]});
+let S=D(),G={},H={m:'quiz',ex:0,ch:new Set(CH),bm:0,tm:'off'};
+try{Object.assign(S,JSON.parse(localStorage.getItem(K)))}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const skin=()=>document.documentElement.dataset.t=S.theme;
+const shuf=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const ans=q=>q.options?q.options[typeof q.answer=='number'?q.answer:'ABCD'.indexOf(String(q.answer).toUpperCase())]:q.answer;
+function prep(q){const ct=ans(q),o=shuf(q.options||[ct,...shuf(B.filter(x=>!x.options&&x.answer!=ct).map(x=>x.answer)).slice(0,3)]);return{q,o,ct,c:o.indexOf(ct)}}
+/* ---- sound (Web Audio, follows volume + mute) ---- */
+let AC;
+function tone(f,d,t='sine',v=.3,at=0){if(S.mute||!S.vol)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume();
+const n=AC.currentTime+at,o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v*S.vol/100,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g).connect(AC.destination);o.start(n);o.stop(n+d)}catch(e){}}
+const SFX={click:()=>tone(900,.05,'triangle',.15),pick:()=>tone(520,.1,'square',.1),ok:()=>{tone(660,.15);tone(990,.3,'sine',.3,.12)},bad:()=>tone(140,.35,'sawtooth',.22),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.35,'triangle',.3,i*.14))};
+document.addEventListener('click',e=>{if(e.target.closest('button')&&!e.target.closest('.opt,[data-f]'))SFX.click()});
+/* ---- helpers ---- */
+const day=d=>new Date(d-new Date(d).getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function streak(){let n=0,d=Date.now();if(!S.days.includes(day(d)))d-=864e5;while(S.days.includes(day(d))){n++;d-=864e5}return n}
+function rec(s,n,ex){const p=Math.round(s/n*100),t=day(Date.now());S.hist=[...S.hist,{d:Date.now(),s,n,p,ex}].slice(-100);if(!S.days.includes(t))S.days=[...S.days,t].slice(-400);save();return p}
+const tog=id=>{S.bm=S.bm.includes(id)?S.bm.filter(x=>x!=id):[...S.bm,id];save()};
+const star=id=>S.bm.includes(id)?'★':'☆';
+function boom(){const c=document.createElement('canvas'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;document.body.append(c);
+const P=Array.from({length:90},()=>({x:c.width/2,y:c.height/2,vx:(Math.random()-.5)*16,vy:-Math.random()*14-4,r:Math.random()*6+3,c:`hsl(${Math.random()*360},85%,60%)`}));let f=0;
+(function a(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;x.fillStyle=p.c;x.fillRect(p.x,p.y,p.r,p.r)});++f<110?requestAnimationFrame(a):c.remove()})()}
+function chart(){const h=S.hist.slice(-15);if(!h.length)return'<p class="mu">Finish a run to see your accuracy here.</p>';
+const pt=h.map((r,i)=>[h.length<2?150:10+i*280/(h.length-1),95-r.p*.85]);
+return`<svg viewBox="0 0 300 100" width="100%"><polyline points="${pt.map(p=>p.join(',')).join(' ')}" fill="none" stroke="var(--ac)" stroke-width="3"/>${pt.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--ac)"/>`).join('')}</svg><small>Last ${h.length} runs · best ${Math.max(...h.map(r=>r.p))}%</small>`}
+/* ---- home ---- */
+const seg=(k,o)=>o.map(([v,t])=>`<button class="${H[k]==v?'on':''}" data-k="${k}" data-v="${v}">${t}</button>`).join('');
+function home(){clearInterval(G.iv);const n=streak();
+app.innerHTML=`<h1>📚 History Revision</h1>
+<div class="row sp"><span>🔥 Streak: <b>${n}</b> day${n==1?'':'s'}</span><span class="mu">${B.length} questions · ${S.bm.length} ⭐</span></div>
+<div class="card"><div class="row">${seg('m',[['quiz','Quiz'],['flash','Flashcards']])}</div>
+${H.m=='quiz'?`<div class="row" style="margin-top:8px">${seg('ex',[[0,'Practice'],[1,'Exam']])}</div><p class="mu" style="margin:6px 0 0">${H.ex?'Exam: no feedback until you finish.':'Practice: instant feedback.'}</p>
+<p><select id="tsel">${[['off','No timer'],['q20','20s / question'],['q30','30s / question'],['q60','60s / question'],['t10','10 min total'],['t20','20 min total']].map(([v,t])=>`<option value="${v}" ${H.tm==v?'selected':''}>${t}</option>`).join('')}</select></p>`:''}
+<p class="mu">Chapters</p><div class="row">${CH.map(c=>`<button class="${H.ch.has(c)?'on':''}" data-c="${c}">${c}</button>`).join('')}</div>
+<p><label><input type="checkbox" id="hb" ${H.bm?'checked':''}> ⭐ Bookmarked only</label></p>
+<button class="p" id="go" style="width:100%">Start</button></div>
+<div class="card"><b>Accuracy</b>${chart()}</div>`}
+/* ---- quiz ---- */
+function quiz(q,ex=H.ex,tm=H.tm){clearInterval(G.iv);G={m:'q',ex,tm,items:shuf(q).map(prep),i:0,ans:[],lock:0};if(tm[0]=='t'){G.left=+tm.slice(1)*60;timer()}qv()}
+const showT=()=>{const e=$('#tm');if(e&&G.tm!='off')e.textContent='⏱ '+(G.left/60|0)+':'+String(G.left%60).padStart(2,'0')};
+function timer(){clearInterval(G.iv);showT();G.iv=setInterval(()=>{G.left--;showT();if(G.left<1){clearInterval(G.iv);if(G.tm[0]=='t')fin();else if(!G.lock)G.ex?nxt():pick(-1)}},1000)}
+function qv(){const p=G.items[G.i],n=G.items.length;G.lock=0;
+app.innerHTML=`<div class="row sp"><span>${G.i+1}/${n}</span><b id="tm"></b><button class="star" id="bm">${star(p.q.id)}</button></div><div class="prog"><i style="width:${G.i/n*100}%"></i></div>
+<div class="card"><h3 style="margin:0">${p.q.question}</h3></div>${p.o.map((x,k)=>`<button class="opt" data-o="${k}"><b>${'ABCD'[k]}</b>${x}</button>`).join('')}<div id="fb"></div>`;
+if(G.tm[0]=='q'){G.left=+G.tm.slice(1);timer()}else showT()}
+function nb(){if(!$('#nx'))$('#fb').insertAdjacentHTML('afterend',`<button class="p" id="nx" style="width:100%">${G.i+1<G.items.length?'Next':'Finish'}</button>`)}
+function pick(k){const p=G.items[G.i];if(G.lock)return;G.ans[G.i]=k;const bs=document.querySelectorAll('.opt');
+if(G.ex){SFX.pick();bs.forEach((b,j)=>b.classList.toggle('sel',j==k));return nb()}
+G.lock=1;if(G.tm[0]=='q')clearInterval(G.iv);
+bs.forEach((b,j)=>{b.disabled=true;b.classList.toggle('ok',j==p.c);b.classList.toggle('bad',j==k&&k!=p.c)});
+k==p.c?SFX.ok():SFX.bad();$('#fb').innerHTML=`<p class="ex">💡 ${p.q.explanation}</p>`;nb()}
+const nxt=()=>{G.i++;G.i<G.items.length?qv():fin()};
+function fin(){clearInterval(G.iv);const n=G.items.length,s=G.items.filter((p,i)=>G.ans[i]===p.c).length,pc=rec(s,n,G.ex);G.wr=G.items.filter((p,i)=>G.ans[i]!==p.c);SFX.win();if(pc>=80)boom();
+app.innerHTML=`<div class="card" style="text-align:center"><h1 style="margin:0">${pc}%</h1><p>${s} / ${n} correct · ${G.ex?'Exam':'Practice'} mode</p></div>
+<div class="row"><button class="p" data-r="a">🔄 Retry entire quiz</button>${G.wr.length?'<button data-r="w">❌ Retry incorrect only</button>':''}<button data-h="1">🏠 Home</button></div><h3>Review</h3>
+${G.items.map((p,i)=>{const a=G.ans[i],ok=a===p.c;return`<div class="card"><div class="row sp"><b>${i+1}. ${ok?'✅':'❌'}</b><button class="star" data-b="${p.q.id}">${star(p.q.id)}</button></div><p>${p.q.question}</p><p class="mu">Your answer: ${a>=0&&p.o[a]!=null?p.o[a]:'—'}</p><p style="color:var(--ok)">Correct: ${p.ct}</p><p class="ex">💡 ${p.q.explanation}</p></div>`}).join('')}`}
+/* ---- flashcards ---- */
+function flash(q){clearInterval(G.iv);G={m:'f',items:shuf(q).map(q=>({q})),i:0,mc:[],rv:[]};fv()}
+function fv(){const p=G.items[G.i],n=G.items.length;G.b=0;
+app.innerHTML=`<div class="row sp"><span>${G.i+1}/${n}</span><button class="star" id="bm">${star(p.q.id)}</button></div><div class="prog"><i style="width:${G.i/n*100}%"></i></div>
+<div class="card fc" id="fc">${p.q.question}<small>Tap to flip</small></div><div class="row" id="fa" style="justify-content:center"></div>`}
+function flip(f){const p=G.items[G.i];G.b=!G.b;SFX.click();f.innerHTML=G.b?`<b>${ans(p.q)}</b><p class="mu">${p.q.explanation}</p>`:`${p.q.question}<small>Tap to flip</small>`;
+f.classList.remove('flip');void f.offsetWidth;f.classList.add('flip');if(G.b)$('#fa').innerHTML='<button class="p" data-f="1">✅ Mastered</button><button data-f="0">🔁 Review Again</button>'}
+function fend(){const n=G.items.length,m=G.mc.length;rec(m,n,0);SFX.win();
+app.innerHTML=`<div class="card" style="text-align:center"><h2>🎴 Deck done</h2><p>✅ Mastered: <b>${m}</b> · 🔁 Review: <b>${G.rv.length}</b></p></div>${G.rv.length?'<button class="p" data-r="f" style="width:100%">Review the missed cards</button>':''}<button data-h="1" style="width:100%;margin-top:8px">🏠 Home</button>`}
+/* ---- events ---- */
+app.onclick=e=>{const f=e.target.closest('#fc');if(f)return flip(f);const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+if(d.o!=null)return pick(+d.o);
+if(t.id=='nx')return nxt();
+if(t.id=='bm'||d.b){tog(t.id=='bm'?G.items[G.i].q.id:+d.b);t.textContent=star(t.id=='bm'?G.items[G.i].q.id:+d.b);return}
+if(d.f!=null){const id=G.items[G.i].q.id;if(d.f=='1'){S.done=[...new Set([...S.done,id])];G.mc.push(G.items[G.i].q);SFX.ok()}else{S.done=S.done.filter(x=>x!=id);G.rv.push(G.items[G.i].q)}save();G.i++;return G.i<G.items.length?fv():fend()}
+if(d.r){if(d.r=='f')return flash(G.rv);const l=(d.r=='a'?G.items:G.wr).map(p=>p.q);return quiz(l,G.ex,G.tm)}
+if(d.h)return home();
+if(d.k){H[d.k]=isNaN(d.v)?d.v:+d.v;return home()}
+if(d.c){H.ch.has(d.c)?H.ch.delete(d.c):H.ch.add(d.c);return home()}
+if(t.id=='go'){const q=B.filter(x=>H.ch.has(x.chapter)&&(!H.bm||S.bm.includes(x.id)));if(!q.length)return alert('No questions match these filters.');H.m=='quiz'?quiz(q):flash(q)}};
+app.onchange=e=>{if(e.target.id=='tsel')H.tm=e.target.value;if(e.target.id=='hb')H.bm=e.target.checked?1:0};
+/* ---- settings ---- */
+function sett(){st.innerHTML=`<h3>Settings</h3><p class="mu">Theme</p><div class="row">${THEMES.map(([v,t])=>`<button class="${S.theme==v?'on':''}" data-th="${v}">${t}</button>`).join('')}</div>
+<p class="mu">Volume</p><div class="row"><input type="range" id="vr" min="0" max="100" value="${S.vol}" style="flex:1"><input type="number" id="vn" min="0" max="100" value="${S.vol}" style="width:64px"><button id="mu">${S.mute?'🔇':'🔊'}</button></div>
+<p class="mu">Progress</p><div class="row"><button id="ex">⬇️ Export</button><button id="im">⬆️ Import</button><button id="rs">🗑 Reset</button></div><input type="file" id="fi" accept=".json" hidden>`}
+st.oninput=e=>{const i=e.target.id;if(i!='vr'&&i!='vn')return;const v=Math.max(0,Math.min(100,+e.target.value||0));S.vol=v;if(i=='vr')$('#vn').value=v;else $('#vr').value=v;save()};
+st.onchange=e=>{if(e.target.id=='fi'){imp(e.target.files[0]);e.target.value=''}else SFX.pick()};
+st.onclick=e=>{const t=e.target.closest('button');if(!t)return;
+if(t.dataset.th!=null){S.theme=t.dataset.th;skin();save();sett()}
+else if(t.id=='mu'){S.mute=!S.mute;t.textContent=S.mute?'🔇':'🔊';save()}
+else if(t.id=='ex'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='quiz-progress.json';a.click()}
+else if(t.id=='im')$('#fi').click();
+else if(t.id=='rs'&&confirm('Erase all progress, bookmarks and history?')){S=Object.assign(D(),{theme:S.theme,vol:S.vol,mute:S.mute});save();home()}};
+function imp(f){if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t),nums=a=>Array.isArray(a)?a.filter(Number.isFinite):[];
+S.bm=nums(o.bm);S.done=nums(o.done);S.days=Array.isArray(o.days)?o.days.filter(x=>/^\d{4}-\d\d-\d\d$/.test(x)):[];
+S.hist=Array.isArray(o.hist)?o.hist.filter(r=>r&&Number.isFinite(r.p)).map(r=>({d:+r.d||0,s:+r.s||0,n:+r.n||0,p:Math.max(0,Math.min(100,r.p)),ex:+r.ex||0})):[];
+if(THEMES.some(x=>x[0]===o.theme))S.theme=o.theme;if(Number.isFinite(o.vol))S.vol=Math.max(0,Math.min(100,o.vol));S.mute=!!o.mute;
+save();skin();sett();home();alert('Progress imported ✅')}catch(e){alert('That file is not a valid progress export.')}})}
+$('#gear').onclick=()=>{sett();st.classList.toggle('o')};
+skin();home();
+</script></body></html>
